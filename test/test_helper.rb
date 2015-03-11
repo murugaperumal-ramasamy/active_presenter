@@ -76,6 +76,14 @@ class User < ActiveRecord::Base
     super
   end
 
+  def save!
+    if login == 'halt_during_save'
+      errors[:base] << "error during save"
+      raise ActiveRecord::RecordNotSaved.new(self)
+    end
+    super
+  end
+
   def halt_with_error_before_save
     if login == 'halt_before_save'
       errors[:base] << "error before save"

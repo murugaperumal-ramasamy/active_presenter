@@ -183,11 +183,16 @@ module ActivePresenter
       saved = false
       ActiveRecord::Base.transaction do
         raise ActiveRecord::RecordInvalid.new(self) unless valid?
-        run_callbacks :save do
-          presented.keys.select {|key| save?(key, send(key))}.all? {|key| send(key).save!}
-          saved = true
+        begin
+          run_callbacks :save do
+            presented.keys.select {|key| save?(key, send(key))}.all? {|key| send(key).save!}
+            saved = true
+          end
+          raise ActiveRecord::RecordNotSaved.new(self) unless saved
+        rescue ActiveRecord::RecordNotSaved
+          merge_all_errors
+          raise
         end
-        raise ActiveRecord::RecordNotSaved.new(self) unless saved
       end
       saved
     end
