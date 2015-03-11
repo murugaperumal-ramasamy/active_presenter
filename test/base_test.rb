@@ -82,6 +82,18 @@ Expectations do
     s.errors.full_messages
   end
 
+  expect ["User error before save"] do
+    s = SignupPresenter.new(user_login: 'halt_before_save', user_password: "passw0rd")
+    s.save
+    s.errors.full_messages
+  end
+
+  expect ["User error during save"] do
+    s = SignupPresenter.new(user_login: 'halt_during_save', user_password: "passw0rd")
+    s.save
+    s.errors.full_messages
+  end
+
   expect ['c4N n07 83 8L4nK'] do
     old_locale = I18n.locale
     I18n.locale = '1337'

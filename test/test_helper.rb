@@ -56,6 +56,7 @@ end
 class User < ActiveRecord::Base
   validates_presence_of :login
   validate :presence_of_password
+  before_save :halt_with_error_before_save
   # attr_accessible :login, :password, :birthday
   attr_accessor   :password_confirmation
 
@@ -65,6 +66,21 @@ class User < ActiveRecord::Base
       error_message = I18n.t(:blank, {:default => "can't be blank", :scope => [:activerecord, :errors, :messages]})
       errors[:base] << ("#{attribute_name} #{error_message}")
     end
+  end
+
+  def save
+    if login == 'halt_during_save'
+      errors[:base] << "error during save"
+      return false
+    end
+    super
+  end
+
+  def halt_with_error_before_save
+    if login == 'halt_before_save'
+      errors[:base] << "error before save"
+    end
+    errors.empty?
   end
 end
 class Account < ActiveRecord::Base ;end
