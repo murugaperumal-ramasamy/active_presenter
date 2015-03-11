@@ -160,9 +160,15 @@ module ActivePresenter
       saved = false
       ActiveRecord::Base.transaction do
         if valid?
-          run_callbacks :save do
-            saved = presented.keys.select {|key| save?(key, send(key))}.all? {|key| send(key).save}
-            raise ActiveRecord::Rollback unless saved
+          begin
+            run_callbacks :save do
+              saved = presented.keys.select {|key| save?(key, send(key))}.all? {|key| send(key).save}
+              raise ActiveRecord::Rollback unless saved
+            end
+            merge_all_errors unless saved
+          rescue ActiveRecord::Rollback
+            merge_all_errors
+            raise
           end
         end
       end
@@ -260,6 +266,13 @@ module ActivePresenter
         else
           errors.add(attribute_prefix(type)+att.to_s, msg)
         end
+      end
+    end
+
+    def merge_all_errors
+      presented.keys.each do |type|
+        presented_inst = send(type)
+        merge_errors(presented_inst, type)
       end
     end
 
