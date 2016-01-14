@@ -17,7 +17,7 @@ module ActivePresenter
     #   class SignupPresenter < ActivePresenter::Base
     #     presents :user, :account
     #   end
-    #  
+    #
     # In the above example, :user will (predictably) become User. If you want to override this behaviour, specify the desired types in a hash, as so:
     #
     #   class PresenterWithTwoAddresses < ActivePresenter::Base
@@ -66,7 +66,7 @@ module ActivePresenter
     def self.human_name(options = {}) # :nodoc:
       defaults = self_and_descendants_from_active_record.map do |klass|
         :"#{klass.name.underscore}"
-      end 
+      end
       defaults << self.name.humanize
       I18n.translate(defaults.shift, {scope: [:activerecord, :models], count: 1, default: defaults}.merge(options))
     end
@@ -100,11 +100,11 @@ module ActivePresenter
     def attributes=(attrs)
       return if attrs.nil?
 
-      attrs = attrs.stringify_keys      
+      attrs = attrs.stringify_keys
       multi_parameter_attributes = {}
       # attrs = sanitize_for_mass_assignment(attrs)
 
-      attrs.each do |k,v|
+      attrs.each do |k, v|
         if (base_attribute = k.to_s.split("(").first) != k.to_s
           presentable = presentable_for(base_attribute)
           multi_parameter_attributes[presentable] ||= {}
@@ -277,7 +277,7 @@ module ActivePresenter
     def merge_all_errors
       presented.keys.each do |type|
         presented_inst = send(type)
-        merge_errors(presented_inst, type)
+        merge_errors(presented_inst, type) if presented_inst
       end
     end
 
