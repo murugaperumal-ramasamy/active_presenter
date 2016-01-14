@@ -200,7 +200,7 @@ Expectations do
   end
 
   # Multiparameter assignment
-  expect Time.parse('March 27 1980 9:30:59 am') do
+  expect Time.parse('March 27 1980 9:30:59 am UTC') do
     s = SignupPresenter.new
     s.update_attributes({
       :"user_birthday(1i)" => '1980',
