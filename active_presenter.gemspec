@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
     "test/lint_test.rb",
     "test/test_helper.rb"
   ]
-  s.add_runtime_dependency(%q<activerecord>, ["~> 4.1"])
+  s.add_runtime_dependency(%q<activerecord>, ["~> 4.0"])
   s.add_development_dependency(%q<expectations>, ["~> 2.0"])
   s.add_development_dependency(%q<sqlite3>, ["~> 1.3"])
   s.add_development_dependency(%q<minitest>, ["~> 5.1"])
