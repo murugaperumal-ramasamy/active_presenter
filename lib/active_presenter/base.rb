@@ -282,12 +282,10 @@ module ActivePresenter
     end
 
     def attribute_protected?(name)
-
-      return false
-      # presentable = presentable_for(name)
-      # return false unless presentable
-      # flat_attribute = {flatten_attribute_name(name, presentable) => ''} #remove_att... normally takes a hash, so we use a ''
-      # presented[presentable].new.send(:sanitize_for_mass_assignment, flat_attribute).empty?
+      presentable = presentable_for(name)
+      return false unless presentable
+      flat_attribute = {flatten_attribute_name(name, presentable) => ''} #remove_att... normally takes a hash, so we use a ''
+      presented[presentable].new.send(:sanitize_for_mass_assignment, flat_attribute).empty?
     end
   end
 end
